@@ -24,13 +24,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUser = void 0;
 // src/application/use-cases/user/CreateUser.ts
 const tsyringe_1 = require("tsyringe");
+const uuid_1 = require("uuid");
 const User_1 = require("../../../domain/entities/User");
 let CreateUser = class CreateUser {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
-    execute(id, username, street, email, password) {
+    execute(username, street, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
+            const id = (0, uuid_1.v4)();
             const user = new User_1.User(id, username, street, email, password);
             yield this.userRepository.save(user);
         });

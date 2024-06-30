@@ -24,13 +24,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateStreet = void 0;
 // src/application/use-cases/street/CreateStreet.ts
 const tsyringe_1 = require("tsyringe");
+const uuid_1 = require("uuid");
 const Street_1 = require("../../../domain/entities/Street");
 let CreateStreet = class CreateStreet {
     constructor(streetRepository) {
         this.streetRepository = streetRepository;
     }
-    execute(id, name) {
+    execute(name) {
         return __awaiter(this, void 0, void 0, function* () {
+            const id = (0, uuid_1.v4)();
             const street = new Street_1.Street(id, name);
             yield this.streetRepository.save(street);
         });

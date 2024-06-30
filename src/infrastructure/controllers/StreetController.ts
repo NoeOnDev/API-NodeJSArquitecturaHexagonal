@@ -1,7 +1,6 @@
 // src/infrastructure/controllers/StreetController.ts
 import { Request, Response } from 'express';
 import { injectable, inject } from 'tsyringe';
-import { v4 as uuidv4 } from 'uuid';
 import { CreateStreet } from '../../application/use-cases/street/CreateStreet';
 import { GetStreetById } from '../../application/use-cases/street/GetStreetById';
 import { GetAllStreets } from '../../application/use-cases/street/GetAllStreets';
@@ -16,8 +15,7 @@ export class StreetController {
 
     async create(req: Request, res: Response): Promise<void> {
         const { name } = req.body;
-        const id = uuidv4();
-        await this.createStreet.execute(id, name);
+        await this.createStreet.execute(name);
         res.status(201).send();
     }
 

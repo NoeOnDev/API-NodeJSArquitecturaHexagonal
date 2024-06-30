@@ -1,5 +1,6 @@
 // src/application/use-cases/street/CreateStreet.ts
 import { injectable, inject } from 'tsyringe';
+import { v4 as uuidv4 } from 'uuid';
 import { Street } from '../../../domain/entities/Street';
 import { StreetRepository } from '../../../domain/repositories/StreetRepository';
 
@@ -7,7 +8,8 @@ import { StreetRepository } from '../../../domain/repositories/StreetRepository'
 export class CreateStreet {
     constructor(@inject('StreetRepository') private streetRepository: StreetRepository) { }
 
-    async execute(id: string, name: string): Promise<void> {
+    async execute(name: string): Promise<void> {
+        const id = uuidv4();
         const street = new Street(id, name);
         await this.streetRepository.save(street);
     }

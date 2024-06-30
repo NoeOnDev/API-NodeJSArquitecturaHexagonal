@@ -23,7 +23,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StreetController = void 0;
 const tsyringe_1 = require("tsyringe");
-const uuid_1 = require("uuid");
 const CreateStreet_1 = require("../../application/use-cases/street/CreateStreet");
 const GetStreetById_1 = require("../../application/use-cases/street/GetStreetById");
 const GetAllStreets_1 = require("../../application/use-cases/street/GetAllStreets");
@@ -36,8 +35,7 @@ let StreetController = class StreetController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { name } = req.body;
-            const id = (0, uuid_1.v4)();
-            yield this.createStreet.execute(id, name);
+            yield this.createStreet.execute(name);
             res.status(201).send();
         });
     }
