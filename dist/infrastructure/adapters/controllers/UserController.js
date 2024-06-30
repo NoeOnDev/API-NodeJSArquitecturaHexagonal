@@ -23,6 +23,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const tsyringe_1 = require("tsyringe");
+const uuid_1 = require("uuid");
 const CreateUser_1 = require("../../../application/use-cases/user/CreateUser");
 const GetUserById_1 = require("../../../application/use-cases/user/GetUserById");
 const GetAllUsers_1 = require("../../../application/use-cases/user/GetAllUsers");
@@ -34,7 +35,8 @@ let UserController = class UserController {
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id, username, street, email, password } = req.body;
+            const { username, street, email, password } = req.body;
+            const id = (0, uuid_1.v4)();
             yield this.createUser.execute(id, username, street, email, password);
             res.status(201).send();
         });
