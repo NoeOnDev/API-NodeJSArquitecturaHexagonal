@@ -17,6 +17,7 @@ class InMemoryUserRepository {
     save(user) {
         return __awaiter(this, void 0, void 0, function* () {
             this.users.push(user);
+            console.log('User saved:', this.users);
         });
     }
     findByEmail(email) {

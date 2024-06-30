@@ -1,14 +1,16 @@
 // src/infrastructure/adapters/controllers/StreetController.ts
 import { Request, Response } from 'express';
+import { injectable, inject } from 'tsyringe';
 import { CreateStreet } from '../../../application/use-cases/street/CreateStreet';
 import { GetStreetById } from '../../../application/use-cases/street/GetStreetById';
 import { GetAllStreets } from '../../../application/use-cases/street/GetAllStreets';
 
+@injectable()
 export class StreetController {
     constructor(
-        private createStreet: CreateStreet,
-        private getStreetById: GetStreetById,
-        private getAllStreets: GetAllStreets
+        @inject('CreateStreet') private createStreet: CreateStreet,
+        @inject('GetStreetById') private getStreetById: GetStreetById,
+        @inject('GetAllStreets') private getAllStreets: GetAllStreets
     ) { }
 
     async create(req: Request, res: Response): Promise<void> {

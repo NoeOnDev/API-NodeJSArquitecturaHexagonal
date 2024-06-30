@@ -7,6 +7,7 @@ export class InMemoryUserRepository implements UserRepository {
 
     async save(user: User): Promise<void> {
         this.users.push(user);
+        console.log('User saved:', this.users);
     }
 
     async findByEmail(email: string): Promise<User | null> {

@@ -1,33 +1,17 @@
 // src/index.ts
+import 'reflect-metadata';
 import express from 'express';
-import { InMemoryUserRepository } from './infrastructure/adapters/persistence/InMemoryUserRepository';
-import { InMemoryStreetRepository } from './infrastructure/adapters/persistence/InMemoryStreetRepository';
-import { CreateUser } from './application/use-cases/user/CreateUser';
-import { GetUserById } from './application/use-cases/user/GetUserById';
-import { GetAllUsers } from './application/use-cases/user/GetAllUsers';
+import { container } from 'tsyringe';
+import './infrastructure/containers/RepositoryContainer';
+import './infrastructure/containers/UseCaseContainer';
 import { UserController } from './infrastructure/adapters/controllers/UserController';
-import { CreateStreet } from './application/use-cases/street/CreateStreet';
-import { GetStreetById } from './application/use-cases/street/GetStreetById';
-import { GetAllStreets } from './application/use-cases/street/GetAllStreets';
 import { StreetController } from './infrastructure/adapters/controllers/StreetController';
 
 const app = express();
 app.use(express.json());
 
-const userRepository = new InMemoryUserRepository();
-const streetRepository = new InMemoryStreetRepository();
-
-const userController = new UserController(
-    new CreateUser(userRepository),
-    new GetUserById(userRepository),
-    new GetAllUsers(userRepository)
-);
-
-const streetController = new StreetController(
-    new CreateStreet(streetRepository),
-    new GetStreetById(streetRepository),
-    new GetAllStreets(streetRepository)
-);
+const userController = container.resolve(UserController);
+const streetController = container.resolve(StreetController);
 
 app.post('/users', (req, res) => userController.create(req, res));
 app.get('/users/:id', (req, res) => userController.getById(req, res));
