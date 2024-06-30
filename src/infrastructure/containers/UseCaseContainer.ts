@@ -13,4 +13,3 @@ container.register('GetAllUsers', { useClass: GetAllUsers });
 container.register('CreateStreet', { useClass: CreateStreet });
 container.register('GetStreetById', { useClass: GetStreetById });
 container.register('GetAllStreets', { useClass: GetAllStreets });
-
