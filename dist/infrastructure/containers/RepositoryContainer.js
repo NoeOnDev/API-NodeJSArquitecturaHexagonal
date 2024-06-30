@@ -4,5 +4,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tsyringe_1 = require("tsyringe");
 const InMemoryUserRepository_1 = require("../adapters/persistence/InMemoryUserRepository");
 const InMemoryStreetRepository_1 = require("../adapters/persistence/InMemoryStreetRepository");
-tsyringe_1.container.register('UserRepository', { useClass: InMemoryUserRepository_1.InMemoryUserRepository });
-tsyringe_1.container.register('StreetRepository', { useClass: InMemoryStreetRepository_1.InMemoryStreetRepository });
+tsyringe_1.container.registerSingleton('UserRepository', InMemoryUserRepository_1.InMemoryUserRepository);
+tsyringe_1.container.registerSingleton('StreetRepository', InMemoryStreetRepository_1.InMemoryStreetRepository);

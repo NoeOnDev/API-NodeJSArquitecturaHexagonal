@@ -31,10 +31,8 @@ let CreateUser = class CreateUser {
     }
     execute(id, username, street, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('Creating user:', { id, username, street, email, password });
             const user = new User_1.User(id, username, street, email, password);
             yield this.userRepository.save(user);
-            console.log('User created successfully');
         });
     }
 };

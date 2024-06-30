@@ -5,5 +5,5 @@ import { StreetRepository } from '../../domain/repositories/StreetRepository';
 import { InMemoryUserRepository } from '../adapters/persistence/InMemoryUserRepository';
 import { InMemoryStreetRepository } from '../adapters/persistence/InMemoryStreetRepository';
 
-container.register<UserRepository>('UserRepository', { useClass: InMemoryUserRepository });
-container.register<StreetRepository>('StreetRepository', { useClass: InMemoryStreetRepository });
+container.registerSingleton<UserRepository>('UserRepository', InMemoryUserRepository);
+container.registerSingleton<StreetRepository>('StreetRepository', InMemoryStreetRepository);

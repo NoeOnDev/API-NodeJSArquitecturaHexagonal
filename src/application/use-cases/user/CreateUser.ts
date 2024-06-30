@@ -8,9 +8,7 @@ export class CreateUser {
     constructor(@inject('UserRepository') private userRepository: UserRepository) { }
 
     async execute(id: string, username: string, street: string, email: string, password: string): Promise<void> {
-        console.log('Creating user:', { id, username, street, email, password });
         const user = new User(id, username, street, email, password);
         await this.userRepository.save(user);
-        console.log('User created successfully');
     }
 }
