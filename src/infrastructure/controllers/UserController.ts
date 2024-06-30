@@ -1,10 +1,10 @@
-// src/infrastructure/adapters/controllers/UserController.ts
+// src/infrastructure/controllers/UserController.ts
 import { Request, Response } from 'express';
 import { injectable, inject } from 'tsyringe';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateUser } from '../../../application/use-cases/user/CreateUser';
-import { GetUserById } from '../../../application/use-cases/user/GetUserById';
-import { GetAllUsers } from '../../../application/use-cases/user/GetAllUsers';
+import { CreateUser } from '../../application/use-cases/user/CreateUser';
+import { GetUserById } from '../../application/use-cases/user/GetUserById';
+import { GetAllUsers } from '../../application/use-cases/user/GetAllUsers';
 
 @injectable()
 export class UserController {

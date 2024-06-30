@@ -4,8 +4,8 @@ import express from 'express';
 import { container } from 'tsyringe';
 import './infrastructure/containers/RepositoryContainer';
 import './infrastructure/containers/UseCaseContainer';
-import { UserController } from './infrastructure/adapters/controllers/UserController';
-import { StreetController } from './infrastructure/adapters/controllers/StreetController';
+import { UserController } from './infrastructure/controllers/UserController';
+import { StreetController } from './infrastructure/controllers/StreetController';
 
 const app = express();
 app.use(express.json());

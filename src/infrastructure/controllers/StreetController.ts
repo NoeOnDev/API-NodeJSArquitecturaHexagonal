@@ -1,10 +1,10 @@
-// src/infrastructure/adapters/controllers/StreetController.ts
+// src/infrastructure/controllers/StreetController.ts
 import { Request, Response } from 'express';
 import { injectable, inject } from 'tsyringe';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateStreet } from '../../../application/use-cases/street/CreateStreet';
-import { GetStreetById } from '../../../application/use-cases/street/GetStreetById';
-import { GetAllStreets } from '../../../application/use-cases/street/GetAllStreets';
+import { CreateStreet } from '../../application/use-cases/street/CreateStreet';
+import { GetStreetById } from '../../application/use-cases/street/GetStreetById';
+import { GetAllStreets } from '../../application/use-cases/street/GetAllStreets';
 
 @injectable()
 export class StreetController {
