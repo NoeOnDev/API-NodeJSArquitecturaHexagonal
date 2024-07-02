@@ -44,7 +44,7 @@ let UserController = class UserController {
             const { id } = req.params;
             const user = yield this.getUserById.execute(id);
             if (user) {
-                res.json(user);
+                res.json(user.toJSON());
             }
             else {
                 res.status(404).send();
@@ -54,7 +54,7 @@ let UserController = class UserController {
     getAll(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const users = yield this.getAllUsers.execute();
-            res.json(users);
+            res.json(users.map(user => user.toJSON()));
         });
     }
 };

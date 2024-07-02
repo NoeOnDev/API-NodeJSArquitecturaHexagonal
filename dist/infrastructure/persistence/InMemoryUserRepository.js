@@ -21,7 +21,7 @@ class InMemoryUserRepository {
     }
     findByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.users.find(user => user.email === email) || null;
+            return this.users.find(user => user.email.toString() === email) || null;
         });
     }
     findById(id) {

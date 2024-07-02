@@ -21,7 +21,7 @@ class InMemoryStreetRepository {
     }
     findByName(name) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.streets.find(street => street.name === name) || null;
+            return this.streets.find(street => street.name.toString() === name) || null;
         });
     }
     findById(id) {

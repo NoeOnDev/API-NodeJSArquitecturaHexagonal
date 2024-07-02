@@ -23,7 +23,7 @@ export class UserController {
         const { id } = req.params;
         const user = await this.getUserById.execute(id);
         if (user) {
-            res.json(user);
+            res.json(user.toJSON());
         } else {
             res.status(404).send();
         }
@@ -31,6 +31,6 @@ export class UserController {
 
     async getAll(_req: Request, res: Response): Promise<void> {
         const users = await this.getAllUsers.execute();
-        res.json(users);
+        res.json(users.map(user => user.toJSON()));
     }
 }

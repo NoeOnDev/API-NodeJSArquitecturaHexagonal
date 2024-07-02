@@ -23,7 +23,7 @@ export class StreetController {
         const { id } = req.params;
         const street = await this.getStreetById.execute(id);
         if (street) {
-            res.json(street);
+            res.json(street.toJSON());
         } else {
             res.status(404).send();
         }
@@ -31,6 +31,6 @@ export class StreetController {
 
     async getAll(_req: Request, res: Response): Promise<void> {
         const streets = await this.getAllStreets.execute();
-        res.json(streets);
+        res.json(streets.map(street => street.toJSON()));
     }
 }

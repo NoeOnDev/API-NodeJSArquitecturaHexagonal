@@ -26,6 +26,7 @@ exports.CreateStreet = void 0;
 const tsyringe_1 = require("tsyringe");
 const uuid_1 = require("uuid");
 const Street_1 = require("../../../domain/entities/Street");
+const StreetName_1 = require("../../../domain/value-objects/StreetName");
 let CreateStreet = class CreateStreet {
     constructor(streetRepository) {
         this.streetRepository = streetRepository;
@@ -33,7 +34,7 @@ let CreateStreet = class CreateStreet {
     execute(name) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = (0, uuid_1.v4)();
-            const street = new Street_1.Street(id, name);
+            const street = new Street_1.Street(id, new StreetName_1.StreetName(name));
             yield this.streetRepository.save(street);
         });
     }

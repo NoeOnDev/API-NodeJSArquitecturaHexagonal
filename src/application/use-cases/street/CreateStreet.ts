@@ -3,6 +3,7 @@ import { injectable, inject } from 'tsyringe';
 import { v4 as uuidv4 } from 'uuid';
 import { Street } from '../../../domain/entities/Street';
 import { StreetRepository } from '../../../domain/repositories/StreetRepository';
+import { StreetName } from '../../../domain/value-objects/StreetName';
 
 @injectable()
 export class CreateStreet {
@@ -10,7 +11,7 @@ export class CreateStreet {
 
     async execute(name: string): Promise<void> {
         const id = uuidv4();
-        const street = new Street(id, name);
+        const street = new Street(id, new StreetName(name));
         await this.streetRepository.save(street);
     }
 }

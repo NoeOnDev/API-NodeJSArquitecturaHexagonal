@@ -44,7 +44,7 @@ let StreetController = class StreetController {
             const { id } = req.params;
             const street = yield this.getStreetById.execute(id);
             if (street) {
-                res.json(street);
+                res.json(street.toJSON());
             }
             else {
                 res.status(404).send();
@@ -54,7 +54,7 @@ let StreetController = class StreetController {
     getAll(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const streets = yield this.getAllStreets.execute();
-            res.json(streets);
+            res.json(streets.map(street => street.toJSON()));
         });
     }
 };

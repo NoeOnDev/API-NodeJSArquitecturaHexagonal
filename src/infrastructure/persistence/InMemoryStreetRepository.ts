@@ -10,7 +10,7 @@ export class InMemoryStreetRepository implements StreetRepository {
     }
 
     async findByName(name: string): Promise<Street | null> {
-        return this.streets.find(street => street.name === name) || null;
+        return this.streets.find(street => street.name.toString() === name) || null;
     }
 
     async findById(id: string): Promise<Street | null> {
