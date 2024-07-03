@@ -10,7 +10,8 @@ export class User {
         public username: Username,
         public street: StreetName,
         public email: Email,
-        public password: Password
+        public password: Password,
+        public imageUrl?: string
     ) { }
 
     toJSON() {
@@ -19,7 +20,8 @@ export class User {
             username: this.username.toString(),
             street: this.street.toString(),
             email: this.email.toString(),
-            password: this.password.toString()
+            password: this.password.toString(),
+            imageUrl: this.imageUrl
         };
     }
 }

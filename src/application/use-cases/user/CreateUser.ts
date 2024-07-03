@@ -13,7 +13,7 @@ import { ValidationError } from '../../errors/ValidationError';
 export class CreateUser {
     constructor(@inject('UserRepository') private userRepository: UserRepository) { }
 
-    async execute(username: string, street: string, email: string, password: string): Promise<void> {
+    async execute(username: string, street: string, email: string, password: string, imageUrl?: string): Promise<void> {
         if (!username || !street || !email || !password) {
             throw new ValidationError('All fields are required');
         }
@@ -29,7 +29,8 @@ export class CreateUser {
             new Username(username),
             new StreetName(street),
             new Email(email),
-            new Password(password)
+            new Password(password),
+            imageUrl
         );
 
         await this.userRepository.save(user);
