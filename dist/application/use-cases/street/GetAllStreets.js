@@ -24,13 +24,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetAllStreets = void 0;
 // src/application/use-cases/street/GetAllStreets.ts
 const tsyringe_1 = require("tsyringe");
+const AppError_1 = require("../../errors/AppError");
 let GetAllStreets = class GetAllStreets {
     constructor(streetRepository) {
         this.streetRepository = streetRepository;
     }
     execute() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.streetRepository.findAll();
+            try {
+                return yield this.streetRepository.findAll();
+            }
+            catch (error) {
+                throw new AppError_1.AppError('Unable to retrieve streets', 500);
+            }
         });
     }
 };

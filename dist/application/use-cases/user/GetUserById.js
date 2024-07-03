@@ -24,13 +24,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetUserById = void 0;
 // src/application/use-cases/user/GetUserById.ts
 const tsyringe_1 = require("tsyringe");
+const NotFoundError_1 = require("../../errors/NotFoundError");
 let GetUserById = class GetUserById {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
     execute(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.userRepository.findById(id);
+            const user = yield this.userRepository.findById(id);
+            if (!user) {
+                throw new NotFoundError_1.NotFoundError('User not found');
+            }
+            return user;
         });
     }
 };

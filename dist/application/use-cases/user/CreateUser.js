@@ -30,12 +30,20 @@ const Email_1 = require("../../../domain/value-objects/Email");
 const Username_1 = require("../../../domain/value-objects/Username");
 const Password_1 = require("../../../domain/value-objects/Password");
 const StreetName_1 = require("../../../domain/value-objects/StreetName");
+const ValidationError_1 = require("../../errors/ValidationError");
 let CreateUser = class CreateUser {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
     execute(username, street, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!username || !street || !email || !password) {
+                throw new ValidationError_1.ValidationError('All fields are required');
+            }
+            const existingUser = yield this.userRepository.findByEmail(email);
+            if (existingUser) {
+                throw new ValidationError_1.ValidationError('User with this email already exists');
+            }
             const id = (0, uuid_1.v4)();
             const user = new User_1.User(id, new Username_1.Username(username), new StreetName_1.StreetName(street), new Email_1.Email(email), new Password_1.Password(password));
             yield this.userRepository.save(user);

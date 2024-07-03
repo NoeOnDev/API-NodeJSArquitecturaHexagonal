@@ -26,6 +26,8 @@ const tsyringe_1 = require("tsyringe");
 const CreateUser_1 = require("../../application/use-cases/user/CreateUser");
 const GetUserById_1 = require("../../application/use-cases/user/GetUserById");
 const GetAllUsers_1 = require("../../application/use-cases/user/GetAllUsers");
+const AppError_1 = require("../../application/errors/AppError");
+const NotFoundError_1 = require("../../application/errors/NotFoundError");
 let UserController = class UserController {
     constructor(createUser, getUserById, getAllUsers) {
         this.createUser = createUser;
@@ -34,27 +36,57 @@ let UserController = class UserController {
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { username, street, email, password } = req.body;
-            yield this.createUser.execute(username, street, email, password);
-            res.status(201).send();
+            try {
+                const { username, street, email, password } = req.body;
+                yield this.createUser.execute(username, street, email, password);
+                res.status(201).send();
+            }
+            catch (error) {
+                if (error instanceof AppError_1.AppError) {
+                    res.status(error.statusCode).json({ message: error.message });
+                }
+                else {
+                    res.status(500).json({ message: 'Internal Server Error' });
+                }
+            }
         });
     }
     getById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            const user = yield this.getUserById.execute(id);
-            if (user) {
-                res.json(user.toJSON());
+            try {
+                const { id } = req.params;
+                const user = yield this.getUserById.execute(id);
+                if (user) {
+                    res.json(user.toJSON());
+                }
+                else {
+                    throw new NotFoundError_1.NotFoundError('User not found');
+                }
             }
-            else {
-                res.status(404).send();
+            catch (error) {
+                if (error instanceof AppError_1.AppError) {
+                    res.status(error.statusCode).json({ message: error.message });
+                }
+                else {
+                    res.status(500).json({ message: 'Internal Server Error' });
+                }
             }
         });
     }
     getAll(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield this.getAllUsers.execute();
-            res.json(users.map(user => user.toJSON()));
+            try {
+                const users = yield this.getAllUsers.execute();
+                res.json(users.map(user => user.toJSON()));
+            }
+            catch (error) {
+                if (error instanceof AppError_1.AppError) {
+                    res.status(error.statusCode).json({ message: error.message });
+                }
+                else {
+                    res.status(500).json({ message: 'Internal Server Error' });
+                }
+            }
         });
     }
 };

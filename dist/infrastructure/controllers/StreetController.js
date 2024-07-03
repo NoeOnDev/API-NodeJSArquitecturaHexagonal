@@ -26,6 +26,8 @@ const tsyringe_1 = require("tsyringe");
 const CreateStreet_1 = require("../../application/use-cases/street/CreateStreet");
 const GetStreetById_1 = require("../../application/use-cases/street/GetStreetById");
 const GetAllStreets_1 = require("../../application/use-cases/street/GetAllStreets");
+const AppError_1 = require("../../application/errors/AppError");
+const NotFoundError_1 = require("../../application/errors/NotFoundError");
 let StreetController = class StreetController {
     constructor(createStreet, getStreetById, getAllStreets) {
         this.createStreet = createStreet;
@@ -34,27 +36,58 @@ let StreetController = class StreetController {
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { name } = req.body;
-            yield this.createStreet.execute(name);
-            res.status(201).send();
+            try {
+                const { name } = req.body;
+                yield this.createStreet.execute(name);
+                res.status(201).send();
+            }
+            catch (error) {
+                if (error instanceof AppError_1.AppError) {
+                    res.status(error.statusCode).json({ message: error.message });
+                }
+                else {
+                    res.status(500).json({ message: 'Internal Server Error' });
+                }
+            }
         });
     }
     getById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            const street = yield this.getStreetById.execute(id);
-            if (street) {
+            try {
+                const { id } = req.params;
+                const street = yield this.getStreetById.execute(id);
+                if (!street) {
+                    throw new NotFoundError_1.NotFoundError('Street not found');
+                }
                 res.json(street.toJSON());
             }
-            else {
-                res.status(404).send();
+            catch (error) {
+                if (error instanceof NotFoundError_1.NotFoundError) {
+                    res.status(404).json({ message: error.message });
+                }
+                else if (error instanceof AppError_1.AppError) {
+                    res.status(error.statusCode).json({ message: error.message });
+                }
+                else {
+                    res.status(500).json({ message: 'Internal Server Error' });
+                }
             }
         });
     }
     getAll(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const streets = yield this.getAllStreets.execute();
-            res.json(streets.map(street => street.toJSON()));
+            try {
+                const streets = yield this.getAllStreets.execute();
+                res.json(streets.map(street => street.toJSON()));
+            }
+            catch (error) {
+                if (error instanceof AppError_1.AppError) {
+                    res.status(error.statusCode).json({ message: error.message });
+                }
+                else {
+                    res.status(500).json({ message: 'Internal Server Error' });
+                }
+            }
         });
     }
 };

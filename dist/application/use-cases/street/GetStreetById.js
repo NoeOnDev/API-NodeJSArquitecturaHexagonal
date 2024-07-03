@@ -24,13 +24,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetStreetById = void 0;
 // src/application/use-cases/street/GetStreetById.ts
 const tsyringe_1 = require("tsyringe");
+const NotFoundError_1 = require("../../errors/NotFoundError");
 let GetStreetById = class GetStreetById {
     constructor(streetRepository) {
         this.streetRepository = streetRepository;
     }
     execute(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.streetRepository.findById(id);
+            const street = yield this.streetRepository.findById(id);
+            if (!street) {
+                throw new NotFoundError_1.NotFoundError('Street not found');
+            }
+            return street;
         });
     }
 };

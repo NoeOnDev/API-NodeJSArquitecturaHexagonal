@@ -24,13 +24,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetAllUsers = void 0;
 // src/application/use-cases/user/GetAllUsers.ts
 const tsyringe_1 = require("tsyringe");
+const AppError_1 = require("../../errors/AppError");
 let GetAllUsers = class GetAllUsers {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
     execute() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.userRepository.findAll();
+            try {
+                return yield this.userRepository.findAll();
+            }
+            catch (error) {
+                throw new AppError_1.AppError('Unable to retrieve users', 500);
+            }
         });
     }
 };
