@@ -21,79 +21,76 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PostgresUserRepository = void 0;
-// src/infrastructure/persistence/postgres/PostgresUserRepository.ts
+exports.PostgresStreetRepository = void 0;
+// src/infrastructure/persistence/postgres/PostgresStreetRepository.ts
 const tsyringe_1 = require("tsyringe");
 const pg_1 = require("pg");
-const User_1 = require("../../../domain/entities/User");
-const Email_1 = require("../../../domain/value-objects/Email");
-const Username_1 = require("../../../domain/value-objects/Username");
+const Street_1 = require("../../../domain/entities/Street");
 const StreetName_1 = require("../../../domain/value-objects/StreetName");
-const Password_1 = require("../../../domain/value-objects/Password");
-let PostgresUserRepository = class PostgresUserRepository {
+let PostgresStreetRepository = class PostgresStreetRepository {
     constructor(pool) {
         this.pool = pool;
     }
-    save(user) {
+    save(street) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `
-            INSERT INTO users (id, username, street, email, password, image_url)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO streets (id, name)
+            VALUES ($1, $2)
         `;
-            const values = [user.id, user.username.toString(), user.street.toString(), user.email.toString(), user.password.toString(), user.imageUrl];
+            const values = [street.id, street.name.toString()];
             yield this.pool.query(query, values);
         });
     }
-    findByEmail(email) {
+    findByName(name) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT * FROM users WHERE email = $1`;
-            const result = yield this.pool.query(query, [email]);
+            const query = `SELECT * FROM streets WHERE name = $1`;
+            const result = yield this.pool.query(query, [name]);
             if (result.rows.length === 0) {
                 return null;
             }
             const row = result.rows[0];
-            return new User_1.User(row.id, new Username_1.Username(row.username), new StreetName_1.StreetName(row.street), new Email_1.Email(row.email), new Password_1.Password(row.password), row.image_url);
+            return new Street_1.Street(row.id, new StreetName_1.StreetName(row.name));
         });
     }
     findById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT * FROM users WHERE id = $1`;
+            const query = `SELECT * FROM streets WHERE id = $1`;
             const result = yield this.pool.query(query, [id]);
             if (result.rows.length === 0) {
                 return null;
             }
             const row = result.rows[0];
-            return new User_1.User(row.id, new Username_1.Username(row.username), new StreetName_1.StreetName(row.street), new Email_1.Email(row.email), new Password_1.Password(row.password), row.image_url);
+            return new Street_1.Street(row.id, new StreetName_1.StreetName(row.name));
         });
     }
     deleteById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = `DELETE FROM users WHERE id = $1`;
+            const query = `DELETE FROM streets WHERE id = $1`;
             yield this.pool.query(query, [id]);
         });
     }
-    update(user) {
+    update(street) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `
-            UPDATE users
-            SET username = $1, street = $2, email = $3, password = $4, image_url = $5
-            WHERE id = $6
+            UPDATE streets
+            SET name = $1
+            WHERE id = $2
         `;
-            const values = [user.username.toString(), user.street.toString(), user.email.toString(), user.password.toString(), user.imageUrl, user.id];
+            const values = [street.name.toString(), street.id];
             yield this.pool.query(query, values);
         });
     }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT * FROM users`;
+            const query = `SELECT * FROM streets`;
             const result = yield this.pool.query(query);
-            return result.rows.map(row => new User_1.User(row.id, new Username_1.Username(row.username), new StreetName_1.StreetName(row.street), new Email_1.Email(row.email), new Password_1.Password(row.password), row.image_url));
+            return result.rows.map(row => new Street_1.Street(row.id, new StreetName_1.StreetName(row.name)));
         });
     }
 };
-exports.PostgresUserRepository = PostgresUserRepository;
-exports.PostgresUserRepository = PostgresUserRepository = __decorate([
+exports.PostgresStreetRepository = PostgresStreetRepository;
+exports.PostgresStreetRepository = PostgresStreetRepository = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)('PostgresPool')),
     __metadata("design:paramtypes", [pg_1.Pool])
-], PostgresUserRepository);
+], PostgresStreetRepository);
