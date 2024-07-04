@@ -8,16 +8,17 @@ import { InMemoryStreetRepository } from '../persistence/memory/InMemoryStreetRe
 import { PostgresUserRepository } from '../persistence/postgres/PostgresUserRepository';
 import { PostgresStreetRepository } from '../persistence/postgres/PostgresStreetRepository';
 import { pool } from '../config/postgresConfig';
+import { env } from '../config/env';
 
-process.loadEnvFile();
+const persistenceMethod = env.persistenceMethod;
 
-const useInMemory = '';
-
-if (useInMemory) {
+if (persistenceMethod === 'memory') {
     container.registerSingleton<UserRepository>('UserRepository', InMemoryUserRepository);
     container.registerSingleton<StreetRepository>('StreetRepository', InMemoryStreetRepository);
-} else {
+} else if (persistenceMethod === 'postgres') {
     container.registerSingleton<UserRepository>('UserRepository', PostgresUserRepository);
     container.registerSingleton<StreetRepository>('StreetRepository', PostgresStreetRepository);
     container.register<Pool>('PostgresPool', { useValue: pool });
+} else {
+    throw new Error(`Unknown persistence method: ${persistenceMethod}`);
 }
