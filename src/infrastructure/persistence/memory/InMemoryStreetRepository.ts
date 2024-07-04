@@ -1,6 +1,6 @@
-// src/infrastructure/persistence/InMemoryStreetRepository.ts
-import { Street } from "../../domain/entities/Street";
-import { StreetRepository } from "../../domain/repositories/StreetRepository";
+// src/infrastructure/persistence/memory/InMemoryStreetRepository.ts
+import { Street } from "../../../domain/entities/Street";
+import { StreetRepository } from "../../../domain/repositories/StreetRepository";
 
 export class InMemoryStreetRepository implements StreetRepository {
     private streets: Street[] = [];

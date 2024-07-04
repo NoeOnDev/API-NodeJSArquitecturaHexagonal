@@ -1,6 +1,6 @@
-// src/infrastructure/persistence/InMemoryUserRepository.ts
-import { User } from "../../domain/entities/User";
-import { UserRepository } from "../../domain/repositories/UserRepository";
+// src/infrastructure/persistence/memory/InMemoryUserRepository.ts
+import { User } from "../../../domain/entities/User";
+import { UserRepository } from "../../../domain/repositories/UserRepository";
 
 export class InMemoryUserRepository implements UserRepository {
     private users: User[] = [];
