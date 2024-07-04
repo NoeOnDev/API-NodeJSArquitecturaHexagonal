@@ -18,39 +18,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FileController = exports.upload = void 0;
+exports.FileController = void 0;
 const tsyringe_1 = require("tsyringe");
-const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
-const storage = multer_1.default.diskStorage({
-    destination: (_req, _file, cb) => {
-        cb(null, 'images/');
-    },
-    filename: (_req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    }
-});
-exports.upload = (0, multer_1.default)({ storage });
 let FileController = class FileController {
     uploadImage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            exports.upload.single('image')(req, res, (err) => {
-                if (err instanceof multer_1.default.MulterError) {
-                    res.status(400).json({ message: 'Error uploading file' });
-                }
-                else if (err) {
-                    res.status(500).json({ message: 'Internal Server Error' });
-                }
-                else {
-                    if (req.file) {
-                        res.status(200).json({ imageUrl: `/images/${req.file.filename}` });
-                    }
-                    else {
-                        res.status(400).json({ message: 'No file uploaded' });
-                    }
-                }
-            });
+            if (req.file) {
+                res.status(200).json({ imageUrl: `/images/${req.file.filename}` });
+            }
+            else {
+                res.status(400).json({ message: 'No file uploaded' });
+            }
         });
     }
     getImage(req, res) {

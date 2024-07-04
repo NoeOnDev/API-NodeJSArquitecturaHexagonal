@@ -1,13 +1,16 @@
 // src/infrastructure/routes/userRoutes.ts
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { UserController } from '../controllers/UserController';
+import { validateUser } from '../middleware/validation/userValidation';
+import { validationHandler } from '../middleware/validation/validationHandler';
+import { upload } from '../middleware/fileUpload';
 
 const userController = container.resolve(UserController);
 const router = Router();
 
-router.post('/users', (req, res) => userController.create(req, res));
-router.get('/users/:id', (req, res) => userController.getById(req, res));
-router.get('/users', (req, res) => userController.getAll(req, res));
+router.post('/users', upload.single('image'), validateUser, validationHandler, (req: Request, res: Response) => userController.create(req, res));
+router.get('/users/:id', (req: Request, res: Response) => userController.getById(req, res));
+router.get('/users', (req: Request, res: Response) => userController.getAll(req, res));
 
 export default router;

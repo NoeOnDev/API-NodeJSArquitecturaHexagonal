@@ -1,13 +1,11 @@
 // src/infrastructure/controllers/UserController.ts
 import { Request, Response } from 'express';
 import { injectable, inject } from 'tsyringe';
-import multer from 'multer';
 import { CreateUser } from '../../application/use-cases/user/CreateUser';
 import { GetUserById } from '../../application/use-cases/user/GetUserById';
 import { GetAllUsers } from '../../application/use-cases/user/GetAllUsers';
 import { AppError } from '../../application/errors/AppError';
 import { NotFoundError } from '../../application/errors/NotFoundError';
-import { upload } from './FileController';
 
 @injectable()
 export class UserController {
@@ -18,26 +16,18 @@ export class UserController {
     ) { }
 
     async create(req: Request, res: Response): Promise<void> {
-        upload.single('image')(req, res, async (err) => {
-            if (err instanceof multer.MulterError) {
-                res.status(400).json({ message: 'Error uploading file' });
-            } else if (err) {
-                res.status(500).json({ message: 'Internal Server Error' });
+        try {
+            const { username, street, email, password } = req.body;
+            const imageUrl = req.file ? `/images/${req.file.filename}` : undefined;
+            await this.createUser.execute(username, street, email, password, imageUrl);
+            res.status(201).send();
+        } catch (error) {
+            if (error instanceof AppError) {
+                res.status(error.statusCode).json({ message: error.message });
             } else {
-                try {
-                    const { username, street, email, password } = req.body;
-                    const imageUrl = req.file ? `/images/${req.file.filename}` : undefined;
-                    await this.createUser.execute(username, street, email, password, imageUrl);
-                    res.status(201).send();
-                } catch (error) {
-                    if (error instanceof AppError) {
-                        res.status(error.statusCode).json({ message: error.message });
-                    } else {
-                        res.status(500).json({ message: 'Internal Server Error' });
-                    }
-                }
+                res.status(500).json({ message: 'Internal Server Error' });
             }
-        });
+        }
     }
 
     async getById(req: Request, res: Response): Promise<void> {

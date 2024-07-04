@@ -20,19 +20,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const tsyringe_1 = require("tsyringe");
-const multer_1 = __importDefault(require("multer"));
 const CreateUser_1 = require("../../application/use-cases/user/CreateUser");
 const GetUserById_1 = require("../../application/use-cases/user/GetUserById");
 const GetAllUsers_1 = require("../../application/use-cases/user/GetAllUsers");
 const AppError_1 = require("../../application/errors/AppError");
 const NotFoundError_1 = require("../../application/errors/NotFoundError");
-const FileController_1 = require("./FileController");
 let UserController = class UserController {
     constructor(createUser, getUserById, getAllUsers) {
         this.createUser = createUser;
@@ -41,30 +36,20 @@ let UserController = class UserController {
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            FileController_1.upload.single('image')(req, res, (err) => __awaiter(this, void 0, void 0, function* () {
-                if (err instanceof multer_1.default.MulterError) {
-                    res.status(400).json({ message: 'Error uploading file' });
-                }
-                else if (err) {
-                    res.status(500).json({ message: 'Internal Server Error' });
+            try {
+                const { username, street, email, password } = req.body;
+                const imageUrl = req.file ? `/images/${req.file.filename}` : undefined;
+                yield this.createUser.execute(username, street, email, password, imageUrl);
+                res.status(201).send();
+            }
+            catch (error) {
+                if (error instanceof AppError_1.AppError) {
+                    res.status(error.statusCode).json({ message: error.message });
                 }
                 else {
-                    try {
-                        const { username, street, email, password } = req.body;
-                        const imageUrl = req.file ? `/images/${req.file.filename}` : undefined;
-                        yield this.createUser.execute(username, street, email, password, imageUrl);
-                        res.status(201).send();
-                    }
-                    catch (error) {
-                        if (error instanceof AppError_1.AppError) {
-                            res.status(error.statusCode).json({ message: error.message });
-                        }
-                        else {
-                            res.status(500).json({ message: 'Internal Server Error' });
-                        }
-                    }
+                    res.status(500).json({ message: 'Internal Server Error' });
                 }
-            }));
+            }
         });
     }
     getById(req, res) {
