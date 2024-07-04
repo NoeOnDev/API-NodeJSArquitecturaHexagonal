@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.pool = void 0;
 // src/infrastructure/config/postgresConfig.ts
 const pg_1 = require("pg");
+const env_1 = require("./env");
 exports.pool = new pg_1.Pool({
-    user: 'noeon',
-    host: 'localhost',
-    database: 'test',
-    password: 'noeon5885',
-    port: 5432,
+    host: env_1.env.db.host,
+    port: Number(env_1.env.db.port),
+    user: env_1.env.db.user,
+    password: env_1.env.db.password,
+    database: env_1.env.db.database,
 });

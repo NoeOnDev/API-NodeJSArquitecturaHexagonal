@@ -1,10 +1,11 @@
 // src/infrastructure/config/postgresConfig.ts
 import { Pool } from "pg";
+import { env } from "./env";
 
 export const pool = new Pool({
-    user: 'noeon',
-    host: 'localhost',
-    database: 'test',
-    password: 'noeon5885',
-    port: 5432,
+    host: env.db.host,
+    port: Number(env.db.port),
+    user: env.db.user,
+    password: env.db.password,
+    database: env.db.database,
 });

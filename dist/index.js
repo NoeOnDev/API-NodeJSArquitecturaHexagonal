@@ -13,6 +13,8 @@ const userRoutes_1 = __importDefault(require("./infrastructure/routes/userRoutes
 const streetRoutes_1 = __importDefault(require("./infrastructure/routes/streetRoutes"));
 const fileRoutes_1 = __importDefault(require("./infrastructure/routes/fileRoutes"));
 const errorMiddleware_1 = require("./infrastructure/middleware/errorMiddleware");
+const env_1 = require("./infrastructure/config/env");
+const PORT = env_1.env.port;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
@@ -21,6 +23,6 @@ app.use(userRoutes_1.default);
 app.use(streetRoutes_1.default);
 app.use(fileRoutes_1.default);
 app.use(errorMiddleware_1.errorMiddleware);
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
