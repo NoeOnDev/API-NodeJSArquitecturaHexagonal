@@ -11,5 +11,8 @@ exports.env = {
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
     },
+    mongo: {
+        uri: process.env.MONGO_URI,
+    },
     persistenceMethod: process.env.PERSISTENCE_METHOD,
 };

@@ -11,15 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostgresStreetRepository = void 0;
 // src/infrastructure/persistence/postgres/PostgresStreetRepository.ts
@@ -31,61 +22,49 @@ let PostgresStreetRepository = class PostgresStreetRepository {
     constructor(pool) {
         this.pool = pool;
     }
-    save(street) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const query = `
+    async save(street) {
+        const query = `
             INSERT INTO streets (id, name)
             VALUES ($1, $2)
         `;
-            const values = [street.id, street.name.toString()];
-            yield this.pool.query(query, values);
-        });
+        const values = [street.id, street.name.toString()];
+        await this.pool.query(query, values);
     }
-    findByName(name) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT * FROM streets WHERE name = $1`;
-            const result = yield this.pool.query(query, [name]);
-            if (result.rows.length === 0) {
-                return null;
-            }
-            const row = result.rows[0];
-            return new Street_1.Street(row.id, new StreetName_1.StreetName(row.name));
-        });
+    async findByName(name) {
+        const query = `SELECT * FROM streets WHERE name = $1`;
+        const result = await this.pool.query(query, [name]);
+        if (result.rows.length === 0) {
+            return null;
+        }
+        const row = result.rows[0];
+        return new Street_1.Street(row.id, new StreetName_1.StreetName(row.name));
     }
-    findById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT * FROM streets WHERE id = $1`;
-            const result = yield this.pool.query(query, [id]);
-            if (result.rows.length === 0) {
-                return null;
-            }
-            const row = result.rows[0];
-            return new Street_1.Street(row.id, new StreetName_1.StreetName(row.name));
-        });
+    async findById(id) {
+        const query = `SELECT * FROM streets WHERE id = $1`;
+        const result = await this.pool.query(query, [id]);
+        if (result.rows.length === 0) {
+            return null;
+        }
+        const row = result.rows[0];
+        return new Street_1.Street(row.id, new StreetName_1.StreetName(row.name));
     }
-    deleteById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const query = `DELETE FROM streets WHERE id = $1`;
-            yield this.pool.query(query, [id]);
-        });
+    async deleteById(id) {
+        const query = `DELETE FROM streets WHERE id = $1`;
+        await this.pool.query(query, [id]);
     }
-    update(street) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const query = `
+    async update(street) {
+        const query = `
             UPDATE streets
             SET name = $1
             WHERE id = $2
         `;
-            const values = [street.name.toString(), street.id];
-            yield this.pool.query(query, values);
-        });
+        const values = [street.name.toString(), street.id];
+        await this.pool.query(query, values);
     }
-    findAll() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT * FROM streets`;
-            const result = yield this.pool.query(query);
-            return result.rows.map(row => new Street_1.Street(row.id, new StreetName_1.StreetName(row.name)));
-        });
+    async findAll() {
+        const query = `SELECT * FROM streets`;
+        const result = await this.pool.query(query);
+        return result.rows.map(row => new Street_1.Street(row.id, new StreetName_1.StreetName(row.name)));
     }
 };
 exports.PostgresStreetRepository = PostgresStreetRepository;

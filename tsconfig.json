@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2016",                                  /* Especifica la versión de JavaScript a la que se compilará el código TypeScript. Puedes ajustar esto según tus necesidades. */
+    "target": "ES2017",                                  /* Especifica la versión de JavaScript a la que se compilará el código TypeScript. Puedes ajustar esto según tus necesidades. */
     "module": "commonjs",                                /* Usa CommonJS para la compatibilidad con Node.js. */
     "outDir": "./dist",                                  /* Directorio donde se colocarán los archivos compilados. */
     "rootDir": "./src",                                  /* Directorio raíz de los archivos fuente. */

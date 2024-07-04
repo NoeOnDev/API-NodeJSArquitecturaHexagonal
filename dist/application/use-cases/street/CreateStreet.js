@@ -11,15 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateStreet = void 0;
 // src/application/use-cases/street/CreateStreet.ts
@@ -32,15 +23,13 @@ let CreateStreet = class CreateStreet {
     constructor(streetRepository) {
         this.streetRepository = streetRepository;
     }
-    execute(name) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!name) {
-                throw new ValidationError_1.ValidationError('Street name is required');
-            }
-            const id = (0, uuid_1.v4)();
-            const street = new Street_1.Street(id, new StreetName_1.StreetName(name));
-            yield this.streetRepository.save(street);
-        });
+    async execute(name) {
+        if (!name) {
+            throw new ValidationError_1.ValidationError('Street name is required');
+        }
+        const id = (0, uuid_1.v4)();
+        const street = new Street_1.Street(id, new StreetName_1.StreetName(name));
+        await this.streetRepository.save(street);
     }
 };
 exports.CreateStreet = CreateStreet;
