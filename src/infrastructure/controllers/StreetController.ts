@@ -1,9 +1,10 @@
-// src/infrastructure/controllers/StreetController.ts
 import { Request, Response } from 'express';
 import { injectable, inject } from 'tsyringe';
 import { CreateStreet } from '../../application/use-cases/street/CreateStreet';
 import { GetStreetById } from '../../application/use-cases/street/GetStreetById';
 import { GetAllStreets } from '../../application/use-cases/street/GetAllStreets';
+import { DeleteStreet } from '../../application/use-cases/street/DeleteStreet';
+import { UpdateStreet } from '../../application/use-cases/street/UpdateStreet';
 import { AppError } from '../../application/errors/AppError';
 import { NotFoundError } from '../../application/errors/NotFoundError';
 
@@ -12,7 +13,9 @@ export class StreetController {
     constructor(
         @inject('CreateStreet') private createStreet: CreateStreet,
         @inject('GetStreetById') private getStreetById: GetStreetById,
-        @inject('GetAllStreets') private getAllStreets: GetAllStreets
+        @inject('GetAllStreets') private getAllStreets: GetAllStreets,
+        @inject('DeleteStreet') private deleteStreet: DeleteStreet,
+        @inject('UpdateStreet') private updateStreet: UpdateStreet
     ) { }
 
     async create(req: Request, res: Response): Promise<void> {
@@ -52,6 +55,35 @@ export class StreetController {
         try {
             const streets = await this.getAllStreets.execute();
             res.json(streets.map(street => street.toJSON()));
+        } catch (error) {
+            if (error instanceof AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            } else {
+                res.status(500).json({ message: 'Internal Server Error' });
+            }
+        }
+    }
+
+    async delete(req: Request, res: Response): Promise<void> {
+        try {
+            const { id } = req.params;
+            await this.deleteStreet.execute(id);
+            res.status(204).send();
+        } catch (error) {
+            if (error instanceof AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            } else {
+                res.status(500).json({ message: 'Internal Server Error' });
+            }
+        }
+    }
+
+    async update(req: Request, res: Response): Promise<void> {
+        try {
+            const { id } = req.params;
+            const { name } = req.body;
+            await this.updateStreet.execute(id, name);
+            res.status(204).send();
         } catch (error) {
             if (error instanceof AppError) {
                 res.status(error.statusCode).json({ message: error.message });
