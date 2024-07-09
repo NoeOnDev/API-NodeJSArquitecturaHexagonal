@@ -10,4 +10,7 @@ exports.pool = new pg_1.Pool({
     user: env_1.env.db.user,
     password: env_1.env.db.password,
     database: env_1.env.db.database,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
