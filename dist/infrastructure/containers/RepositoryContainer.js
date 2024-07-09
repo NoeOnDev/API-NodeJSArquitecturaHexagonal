@@ -17,6 +17,7 @@ if (persistenceMethod === 'memory') {
     tsyringe_1.container.registerSingleton('StreetRepository', InMemoryStreetRepository_1.InMemoryStreetRepository);
 }
 else if (persistenceMethod === 'postgres') {
+    postgresConfig_1.pool.connect().then(() => console.log('Connected to Postgres')).catch((err) => console.error(err));
     tsyringe_1.container.registerSingleton('UserRepository', PostgresUserRepository_1.PostgresUserRepository);
     tsyringe_1.container.registerSingleton('StreetRepository', PostgresStreetRepository_1.PostgresStreetRepository);
     tsyringe_1.container.register('PostgresPool', { useValue: postgresConfig_1.pool });

@@ -19,6 +19,7 @@ if (persistenceMethod === 'memory') {
     container.registerSingleton<UserRepository>('UserRepository', InMemoryUserRepository);
     container.registerSingleton<StreetRepository>('StreetRepository', InMemoryStreetRepository);
 } else if (persistenceMethod === 'postgres') {
+    pool.connect().then(() => console.log('Connected to Postgres')).catch((err) => console.error(err));
     container.registerSingleton<UserRepository>('UserRepository', PostgresUserRepository);
     container.registerSingleton<StreetRepository>('StreetRepository', PostgresStreetRepository);
     container.register<Pool>('PostgresPool', { useValue: pool });
