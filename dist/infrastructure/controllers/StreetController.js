@@ -17,13 +17,17 @@ const tsyringe_1 = require("tsyringe");
 const CreateStreet_1 = require("../../application/use-cases/street/CreateStreet");
 const GetStreetById_1 = require("../../application/use-cases/street/GetStreetById");
 const GetAllStreets_1 = require("../../application/use-cases/street/GetAllStreets");
+const DeleteStreet_1 = require("../../application/use-cases/street/DeleteStreet");
+const UpdateStreet_1 = require("../../application/use-cases/street/UpdateStreet");
 const AppError_1 = require("../../application/errors/AppError");
 const NotFoundError_1 = require("../../application/errors/NotFoundError");
 let StreetController = class StreetController {
-    constructor(createStreet, getStreetById, getAllStreets) {
+    constructor(createStreet, getStreetById, getAllStreets, deleteStreet, updateStreet) {
         this.createStreet = createStreet;
         this.getStreetById = getStreetById;
         this.getAllStreets = getAllStreets;
+        this.deleteStreet = deleteStreet;
+        this.updateStreet = updateStreet;
     }
     async create(req, res) {
         try {
@@ -75,6 +79,37 @@ let StreetController = class StreetController {
             }
         }
     }
+    async delete(req, res) {
+        try {
+            const { id } = req.params;
+            await this.deleteStreet.execute(id);
+            res.status(204).send();
+        }
+        catch (error) {
+            if (error instanceof AppError_1.AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            }
+            else {
+                res.status(500).json({ message: 'Internal Server Error' });
+            }
+        }
+    }
+    async update(req, res) {
+        try {
+            const { id } = req.params;
+            const { name } = req.body;
+            await this.updateStreet.execute(id, name);
+            res.status(204).send();
+        }
+        catch (error) {
+            if (error instanceof AppError_1.AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            }
+            else {
+                res.status(500).json({ message: 'Internal Server Error' });
+            }
+        }
+    }
 };
 exports.StreetController = StreetController;
 exports.StreetController = StreetController = __decorate([
@@ -82,7 +117,11 @@ exports.StreetController = StreetController = __decorate([
     __param(0, (0, tsyringe_1.inject)('CreateStreet')),
     __param(1, (0, tsyringe_1.inject)('GetStreetById')),
     __param(2, (0, tsyringe_1.inject)('GetAllStreets')),
+    __param(3, (0, tsyringe_1.inject)('DeleteStreet')),
+    __param(4, (0, tsyringe_1.inject)('UpdateStreet')),
     __metadata("design:paramtypes", [CreateStreet_1.CreateStreet,
         GetStreetById_1.GetStreetById,
-        GetAllStreets_1.GetAllStreets])
+        GetAllStreets_1.GetAllStreets,
+        DeleteStreet_1.DeleteStreet,
+        UpdateStreet_1.UpdateStreet])
 ], StreetController);

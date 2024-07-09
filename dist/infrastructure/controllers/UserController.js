@@ -17,13 +17,17 @@ const tsyringe_1 = require("tsyringe");
 const CreateUser_1 = require("../../application/use-cases/user/CreateUser");
 const GetUserById_1 = require("../../application/use-cases/user/GetUserById");
 const GetAllUsers_1 = require("../../application/use-cases/user/GetAllUsers");
+const DeleteUser_1 = require("../../application/use-cases/user/DeleteUser");
+const UpdateUser_1 = require("../../application/use-cases/user/UpdateUser");
 const AppError_1 = require("../../application/errors/AppError");
 const NotFoundError_1 = require("../../application/errors/NotFoundError");
 let UserController = class UserController {
-    constructor(createUser, getUserById, getAllUsers) {
+    constructor(createUser, getUserById, getAllUsers, deleteUser, updateUser) {
         this.createUser = createUser;
         this.getUserById = getUserById;
         this.getAllUsers = getAllUsers;
+        this.deleteUser = deleteUser;
+        this.updateUser = updateUser;
     }
     async create(req, res) {
         try {
@@ -75,6 +79,38 @@ let UserController = class UserController {
             }
         }
     }
+    async delete(req, res) {
+        try {
+            const { id } = req.params;
+            await this.deleteUser.execute(id);
+            res.status(204).send();
+        }
+        catch (error) {
+            if (error instanceof AppError_1.AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            }
+            else {
+                res.status(500).json({ message: 'Internal Server Error' });
+            }
+        }
+    }
+    async update(req, res) {
+        try {
+            const { id } = req.params;
+            const { username, street, email, password } = req.body;
+            const imageUrl = req.file ? `/images/${req.file.filename}` : undefined;
+            await this.updateUser.execute(id, username, street, email, password, imageUrl);
+            res.status(204).send();
+        }
+        catch (error) {
+            if (error instanceof AppError_1.AppError) {
+                res.status(error.statusCode).json({ message: error.message });
+            }
+            else {
+                res.status(500).json({ message: 'Internal Server Error' });
+            }
+        }
+    }
 };
 exports.UserController = UserController;
 exports.UserController = UserController = __decorate([
@@ -82,7 +118,11 @@ exports.UserController = UserController = __decorate([
     __param(0, (0, tsyringe_1.inject)('CreateUser')),
     __param(1, (0, tsyringe_1.inject)('GetUserById')),
     __param(2, (0, tsyringe_1.inject)('GetAllUsers')),
+    __param(3, (0, tsyringe_1.inject)('DeleteUser')),
+    __param(4, (0, tsyringe_1.inject)('UpdateUser')),
     __metadata("design:paramtypes", [CreateUser_1.CreateUser,
         GetUserById_1.GetUserById,
-        GetAllUsers_1.GetAllUsers])
+        GetAllUsers_1.GetAllUsers,
+        DeleteUser_1.DeleteUser,
+        UpdateUser_1.UpdateUser])
 ], UserController);
